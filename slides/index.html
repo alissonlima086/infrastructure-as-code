@@ -3,91 +3,460 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reveal.js — deck de teste</title>
+    <meta
+      name="description"
+      content="Seminário sobre automação e gerência de configuração — Grupo 04"
+    />
+    <title>Automação e Gerência de Configuração</title>
     <link rel="stylesheet" href="vendor/reveal/dist/reset.css" />
     <link rel="stylesheet" href="vendor/reveal/dist/reveal.css" />
-    <link rel="stylesheet" href="vendor/reveal/dist/theme/black.css" />
     <link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="reveal">
       <div class="slides">
-        <!-- Conteúdo de demonstração: substitua estas seções pelos seus slides. -->
-        <section data-background-gradient="linear-gradient(135deg, #07111f, #12304a)">
-          <p class="eyebrow">Deck de demonstração</p>
-          <h1>Reveal.js pronto</h1>
-          <p class="lead">Use as setas do teclado ou deslize para navegar.</p>
-          <p class="hint">Pressione <kbd>F</kbd> para tela cheia e <kbd>O</kbd> para visão geral.</p>
+        <section class="cover" data-background-color="#061019">
+          <div class="ambient ambient-a"></div>
+          <div class="ambient ambient-b"></div>
+          <div class="cover-mark" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <p class="kicker">Grupo 04 · Seminário e Projeto A2</p>
+          <h1>Automação e<br /><em>Gerência de Configuração</em></h1>
+          <p class="cover-subtitle">
+            Da configuração manual a uma infraestrutura reproduzível,
+            versionada e verificável.
+          </p>
+          <div class="cover-meta">
+            <span>Infraestrutura como código</span>
+            <span>Ansible · Docker · Nix · GitHub Actions</span>
+          </div>
           <aside class="notes">
-            Esta é uma nota do apresentador. Pressione S para abrir a visão do apresentador.
+            Tempo: 20 segundos. Apresentar o Grupo 04 e o objetivo: conectar os
+            conceitos de automação a uma implantação real em uma VPS Debian.
           </aside>
         </section>
 
         <section>
-          <p class="eyebrow">Teste 01</p>
-          <h2>Recursos habilitados</h2>
-          <div class="feature-grid">
+          <header class="slide-head">
+            <p class="kicker">01 · O problema</p>
+            <h2>Quando o servidor depende da memória de alguém</h2>
+          </header>
+          <div class="manual-layout">
+            <div class="incident-card">
+              <p class="card-label">Cenário proposto</p>
+              <strong>Uma equipe configura servidores manualmente e comete erros.</strong>
+              <div class="incident-path" aria-label="Ciclo de configuração manual">
+                <span>Comando manual</span>
+                <i>→</i>
+                <span>Diferença entre ambientes</span>
+                <i>→</i>
+                <span class="danger">Incidente</span>
+              </div>
+            </div>
+            <div class="problem-list">
+              <article class="fragment fade-up">
+                <b>01</b><span><strong>Erro humano</strong>Etapas esquecidas ou executadas fora de ordem.</span>
+              </article>
+              <article class="fragment fade-up">
+                <b>02</b><span><strong>Inconsistência</strong>Cada servidor termina com uma configuração diferente.</span>
+              </article>
+              <article class="fragment fade-up">
+                <b>03</b><span><strong>Baixa repetibilidade</strong>Recriar o ambiente leva tempo e gera incerteza.</span>
+              </article>
+              <article class="fragment fade-up">
+                <b>04</b><span><strong>Sem rastreabilidade</strong>Não existe histórico confiável do que mudou.</span>
+              </article>
+            </div>
+          </div>
+          <p class="takeaway">O problema não é apenas executar comandos — é garantir o mesmo resultado, sempre.</p>
+          <footer class="source">Fonte: documentação introdutória do Ansible</footer>
+          <aside class="notes">
+            Tempo: 1 minuto. Começar pelo cenário oficial. Destacar que um
+            procedimento manual pode funcionar uma vez, mas não garante
+            consistência nem deixa evidência revisável.
+          </aside>
+        </section>
+
+        <section>
+          <header class="slide-head">
+            <p class="kicker">02 · Fundamentos</p>
+            <h2>Automação transforma intenção em estado</h2>
+          </header>
+          <div class="state-flow">
             <article>
-              <strong>Navegação</strong>
-              <span>Controles, teclado e gestos</span>
+              <span class="state-dot current"></span>
+              <small>Estado atual</small>
+              <strong>Configurações divergentes</strong>
             </article>
-            <article>
-              <strong>URL persistente</strong>
-              <span>Hash atualizado por slide</span>
-            </article>
-            <article>
-              <strong>Código</strong>
-              <span>Destaque de sintaxe local</span>
-            </article>
-            <article>
-              <strong>Offline</strong>
-              <span>Sem dependência de CDN</span>
+            <div class="flow-engine">
+              <span>&lt;/&gt;</span>
+              <b>Código versionado</b>
+              <small>aplica e corrige</small>
+            </div>
+            <article class="desired">
+              <span class="state-dot"></span>
+              <small>Estado desejado</small>
+              <strong>Ambiente padronizado</strong>
             </article>
           </div>
+          <div class="concept-grid">
+            <article><strong>Automação</strong><p>Executa tarefas com intervenção humana mínima.</p></article>
+            <article><strong>Gerência de configuração</strong><p>Mantém sistemas aderentes a uma definição conhecida.</p></article>
+            <article><strong>Infraestrutura como código</strong><p>Representa infraestrutura em arquivos revisáveis e versionados.</p></article>
+            <article><strong>Idempotência</strong><p>Repetir a execução preserva o mesmo estado desejado.</p></article>
+          </div>
+          <div class="formula"><code>estado atual</code><span>+</span><code>automação</code><span>→</span><code>estado desejado</code></div>
+          <footer class="source">Fontes: HashiCorp — Infrastructure as Code · Ansible — Playbooks</footer>
+          <aside class="notes">
+            Tempo: 1 minuto e 10 segundos. Explicar que IaC permite revisão e
+            versionamento. Idempotência não significa “não fazer nada”, mas
+            fazer somente o necessário para alcançar o estado desejado.
+          </aside>
         </section>
 
         <section>
-          <p class="eyebrow">Teste 02</p>
-          <h2>Fragmentos progressivos</h2>
-          <p class="fragment fade-up">Este conteúdo aparece primeiro.</p>
-          <p class="fragment fade-up">Este aparece em seguida.</p>
-          <p class="fragment highlight-current-blue">E este recebe destaque.</p>
-          <p class="hint fragment">Avance para revelar cada item.</p>
-        </section>
-
-        <section>
-          <section data-background-color="#102a43">
-            <p class="eyebrow">Teste 03</p>
-            <h2>Slides verticais</h2>
-            <p>Agora use a seta para baixo.</p>
-            <div class="direction-arrow" aria-hidden="true">↓</div>
-          </section>
-          <section data-background-color="#173f5f">
-            <h2>Segundo nível</h2>
-            <p>Este slide está abaixo do anterior.</p>
-            <p class="hint">Use a seta para cima para voltar.</p>
-          </section>
-        </section>
-
-        <section>
-          <p class="eyebrow">Teste 04</p>
-          <h2>Trecho de código</h2>
-          <pre><code class="language-bash" data-trim data-line-numbers="1-2|4-5">
-make env
-make up
-
-# Depois de editar os slides:
-make deploy
+          <header class="slide-head">
+            <p class="kicker">03 · Ferramentas</p>
+            <h2>Ansible: configuração remota sem agente</h2>
+          </header>
+          <div class="ansible-layout">
+            <div class="controller-diagram">
+              <div class="controller">
+                <span class="terminal-icon">$</span>
+                <small>Controle</small>
+                <strong>Ansible</strong>
+              </div>
+              <div class="ssh-line"><span>SSH</span></div>
+              <div class="server-stack">
+                <div><span></span>Servidor A</div>
+                <div><span></span>Servidor B</div>
+                <div><span></span>Servidor C</div>
+              </div>
+            </div>
+            <div class="tool-points">
+              <div><b>Agentless</b><span>Normalmente usa o SSH já disponível no servidor.</span></div>
+              <div><b>YAML legível</b><span>Playbooks descrevem tarefas e estados esperados.</span></div>
+              <div><b>Inventário</b><span>Organiza hosts e grupos que receberão a automação.</span></div>
+              <div><b>Módulos idempotentes</b><span>Evitam mudanças quando o estado já está correto.</span></div>
+            </div>
+          </div>
+          <pre class="compact-code"><code class="language-yaml" data-trim data-noescape>
+- name: Garantir que o Caddy esteja ativo
+  ansible.builtin.service:
+    name: caddy
+    state: started
+    enabled: true
           </code></pre>
-          <p class="hint">As linhas são destacadas em etapas.</p>
+          <footer class="source">Fontes: docs.ansible.com — Playbooks e Inventários</footer>
+          <aside class="notes">
+            Tempo: 1 minuto. Explicar controle, SSH, inventário e playbook. O
+            exemplo declara o resultado esperado, em vez de descrever uma
+            sequência frágil de comandos shell.
+          </aside>
         </section>
 
-        <section data-background-gradient="linear-gradient(135deg, #12304a, #0d7377)">
-          <p class="eyebrow">Tudo funcionando</p>
-          <h2>Pronto para editar</h2>
-          <p>Substitua estas seções pelo conteúdo da sua apresentação.</p>
-          <p class="file-path"><code>slides/index.html</code></p>
+        <section>
+          <header class="slide-head">
+            <p class="kicker">04 · Ferramentas</p>
+            <h2>Puppet e Chef: configuração em escala</h2>
+          </header>
+          <div class="duel-grid">
+            <article class="tool-card puppet">
+              <div class="tool-card-head"><span>P</span><div><small>Declarativo</small><h3>Puppet</h3></div></div>
+              <ul>
+                <li>Recursos descrevem o estado desejado</li>
+                <li>Frequentemente usa servidor e agentes</li>
+                <li>Catálogos mantêm configurações padronizadas</li>
+              </ul>
+              <p class="best-for">Bom encaixe: frotas grandes e políticas centralizadas.</p>
+            </article>
+            <article class="tool-card chef">
+              <div class="tool-card-head"><span>C</span><div><small>Receitas em Ruby</small><h3>Chef</h3></div></div>
+              <ul>
+                <li>Receitas são agrupadas em cookbooks</li>
+                <li>Chef Infra Client aplica as políticas</li>
+                <li>Modelo flexível e orientado a código</li>
+              </ul>
+              <p class="best-for">Bom encaixe: equipes que precisam de lógica de configuração extensa.</p>
+            </article>
+          </div>
+          <div class="shared-goal"><span>Objetivo comum</span>Pacotes, serviços e arquivos permanecem no padrão definido.</div>
+          <footer class="source">Fontes: Puppet — Architecture · Chef Infra Client</footer>
+          <aside class="notes">
+            Tempo: 50 segundos. Não tratar como concorrentes absolutos do
+            Ansible. Puppet e Chef são fortes em convergência contínua e
+            administração de muitos nós, frequentemente com agentes.
+          </aside>
+        </section>
+
+        <section>
+          <header class="slide-head">
+            <p class="kicker">05 · Ferramentas</p>
+            <h2>Terraform cria. Vagrant reproduz.</h2>
+          </header>
+          <div class="layers-layout">
+            <article class="layer terraform-layer">
+              <div class="layer-number">01</div>
+              <div>
+                <small>Infraestrutura remota</small>
+                <h3>Terraform</h3>
+                <p>Declara VMs, redes, armazenamento e recursos de provedores.</p>
+              </div>
+              <div class="resource-icons"><span>VM</span><span>NET</span><span>VOL</span></div>
+            </article>
+            <article class="layer vagrant-layer">
+              <div class="layer-number">02</div>
+              <div>
+                <small>Ambiente local</small>
+                <h3>Vagrant</h3>
+                <p>Cria máquinas virtuais reproduzíveis para desenvolvimento e testes.</p>
+              </div>
+              <div class="laptop-icon"><i></i><span>DEV</span></div>
+            </article>
+          </div>
+          <div class="combo-flow">
+            <span>Terraform provisiona a VPS</span><i>→</i><span>Ansible configura o sistema</span><i>→</i><span>Aplicação entra em produção</span>
+          </div>
+          <p class="takeaway">Provisionar recursos e configurar sistemas são camadas diferentes — e complementares.</p>
+          <footer class="source">Fontes: developer.hashicorp.com/terraform · developer.hashicorp.com/vagrant</footer>
+          <aside class="notes">
+            Tempo: 50 segundos. Terraform conversa com APIs de provedores e
+            mantém estado da infraestrutura. Vagrant é voltado a ambientes
+            locais reproduzíveis. Ansible assume a configuração do sistema.
+          </aside>
+        </section>
+
+        <section>
+          <header class="slide-head">
+            <p class="kicker">06 · Reprodutibilidade</p>
+            <h2>Nix não é NixOS</h2>
+          </header>
+          <div class="nix-compare">
+            <article>
+              <div class="hex-mark">N</div>
+              <small>Usado neste projeto</small>
+              <h3>Nix</h3>
+              <p>Gerenciador de pacotes e ambientes reproduzíveis.</p>
+              <ul><li>Flakes</li><li>Dependências fixadas</li><li>Shell de desenvolvimento</li></ul>
+            </article>
+            <div class="not-equal">≠</div>
+            <article>
+              <div class="hex-mark muted">OS</div>
+              <small>Não usado na VPS</small>
+              <h3>NixOS</h3>
+              <p>Distribuição Linux configurada declarativamente.</p>
+              <ul><li>Sistema por código</li><li>Gerações</li><li>Rollback</li></ul>
+            </article>
+          </div>
+          <div class="nix-project-flow"><code>flake.nix</code><span>→</span><b>Ansible · actionlint · Docker CLI · Node.js</b><span>→</span><strong>mesmo ambiente na CI</strong></div>
+          <p class="takeaway">A VPS permanece Debian; Nix padroniza as ferramentas de desenvolvimento e automação.</p>
+          <footer class="source">Fontes: nix.dev · nixos.org</footer>
+          <aside class="notes">
+            Tempo: 50 segundos. Corrigir a confusão comum: usamos Nix no runner
+            e no desenvolvimento. A VPS não é convertida para NixOS e continua
+            sendo administrada pelo Ansible sobre Debian.
+          </aside>
+        </section>
+
+        <section>
+          <header class="slide-head compact-head">
+            <p class="kicker">07 · Visão comparativa</p>
+            <h2>Uma cadeia de ferramentas, não uma disputa</h2>
+          </header>
+          <div class="comparison-table" role="table" aria-label="Comparação de ferramentas">
+            <div class="table-row table-head"><span>Ferramenta</span><span>Modelo</span><span>Responsabilidade principal</span><span>Melhor contexto</span></div>
+            <div class="table-row"><b>Ansible</b><span>Agentless · YAML</span><span>Configuração e deploy remoto</span><span>Automação rápida</span></div>
+            <div class="table-row"><b>Puppet</b><span>Declarativo · agentes</span><span>Convergência de configuração</span><span>Frotas padronizadas</span></div>
+            <div class="table-row"><b>Chef</b><span>Receitas · Ruby</span><span>Políticas de configuração</span><span>Lógica customizada</span></div>
+            <div class="table-row"><b>Terraform</b><span>Declarativo · estado</span><span>Recursos de infraestrutura</span><span>Cloud e provedores</span></div>
+            <div class="table-row"><b>Vagrant</b><span>VMs locais</span><span>Ambientes de desenvolvimento</span><span>Teste reproduzível</span></div>
+            <div class="table-row"><b>Nix / NixOS</b><span>Declarativo</span><span>Pacotes / sistema operacional</span><span>Reprodutibilidade</span></div>
+          </div>
+          <div class="tradeoff-strip">
+            <span><b>Benefício</b> Padronização e escala</span>
+            <span><b>Custo</b> Curva de aprendizado e manutenção do código</span>
+            <span><b>Impacto</b> Menos drift e mudanças mais auditáveis</span>
+          </div>
+          <footer class="source">Síntese das documentações oficiais apresentadas</footer>
+          <aside class="notes">
+            Tempo: 40 segundos. A escolha depende da camada e da escala. O
+            protótipo combina Nix, Ansible e Docker porque cada um resolve uma
+            responsabilidade distinta.
+          </aside>
+        </section>
+
+        <section>
+          <header class="slide-head">
+            <p class="kicker">08 · Caso prático</p>
+            <h2>O protótipo publica a própria apresentação</h2>
+          </header>
+          <div class="prototype-layout">
+            <div class="prototype-main">
+              <div class="prototype-browser">
+                <div class="browser-bar"><i></i><i></i><i></i><span>slide.alissonlima.dev</span></div>
+                <div class="browser-content"><small>INFRAESTRUTURA COMO CÓDIGO</small><strong>Automação que pode ser demonstrada</strong></div>
+              </div>
+              <p>A aplicação de slides é a carga de trabalho. O objeto principal é a infraestrutura que a entrega.</p>
+            </div>
+            <div class="prototype-side">
+              <article><small>Problema</small><strong>Configuração manual sujeita a erros</strong></article>
+              <article><small>Solução</small><strong>Provisionar, publicar e verificar por código</strong></article>
+              <article><small>Ambiente</small><strong>VPS Debian existente</strong></article>
+            </div>
+          </div>
+          <div class="stack-row"><span>Ansible</span><span>Docker</span><span>Nix</span><span>GitHub Actions</span><span>Caddy</span><span>Reveal.js</span></div>
+          <footer class="source">Fontes: repositório do projeto · revealjs.com</footer>
+          <aside class="notes">
+            Tempo: 40 segundos. Explicar que os slides são uma aplicação
+            estática simples, escolhida para deixar visível o resultado da
+            automação. O protótipo real é o processo de infraestrutura.
+          </aside>
+        </section>
+
+        <section>
+          <header class="slide-head compact-head">
+            <p class="kicker">09 · Arquitetura</p>
+            <h2>Do push ao HTTPS</h2>
+          </header>
+          <div class="architecture-lane">
+            <p class="lane-label">Fluxo de implantação</p>
+            <div class="lane-steps deploy-lane">
+              <article><span>01</span><b>Git push</b><small>repositório</small></article><i>→</i>
+              <article><span>02</span><b>Actions</b><small>validações</small></article><i>→</i>
+              <article><span>03</span><b>Ansible</b><small>SSH</small></article><i>→</i>
+              <article><span>04</span><b>Docker</b><small>container</small></article><i>→</i>
+              <article><span>05</span><b>Caddy</b><small>HTTPS</small></article>
+            </div>
+          </div>
+          <div class="architecture-lane request">
+            <p class="lane-label">Fluxo de acesso</p>
+            <div class="request-line">
+              <span>Internet</span><i>80 / 443</i><span>Caddy</span><i>127.0.0.1:18473</i><span>Docker</span><i>:18080</i><span>Reveal.js</span>
+            </div>
+          </div>
+          <div class="security-note"><span>◉</span><p><strong>Superfície reduzida</strong>A aplicação só escuta no loopback. Apenas 80/443 ficam públicos.</p></div>
+          <footer class="source">Fontes: arquitetura do projeto · Docker · Caddy</footer>
+          <aside class="notes">
+            Tempo: 1 minuto. Separar claramente dois fluxos: o de implantação,
+            que usa GitHub e SSH, e o de acesso do usuário, que passa pelo Caddy
+            até o container. As portas internas não ficam públicas.
+          </aside>
+        </section>
+
+        <section>
+          <header class="slide-head compact-head">
+            <p class="kicker">10 · Implementação</p>
+            <h2>Playbooks com responsabilidades separadas</h2>
+          </header>
+          <div class="playbook-flow">
+            <article><span>01</span><h3>Provision</h3><p>Valida o Debian, detecta Docker e prepara serviços e diretórios.</p></article>
+            <i>→</i>
+            <article><span>02</span><h3>Deploy</h3><p>Copia arquivos, constrói a imagem, gerencia o container e o Caddy.</p></article>
+            <i>→</i>
+            <article><span>03</span><h3>Verify</h3><p>Confirma saúde do container, endpoint local e HTTPS público.</p></article>
+          </div>
+          <div class="playbook-bottom">
+            <pre><code class="language-yaml" data-trim data-noescape data-line-numbers="1-5|7-11">
+- name: Detectar Docker existente
+  ansible.builtin.command:
+    argv: [docker, --version]
+  register: docker_command
+  failed_when: false
+
+- name: Instalar Docker quando ausente
+  ansible.builtin.apt:
+    name: docker.io
+  when: docker_command.rc != 0
+            </code></pre>
+            <div class="code-explain">
+              <span class="site-badge">site.yaml</span>
+              <p>Orquestra os três playbooks na ordem correta.</p>
+              <div class="conflict-callout"><b>Decisão baseada no estado</b>O Docker do Coolify é preservado, evitando conflito entre <code>containerd.io</code> e os pacotes do Debian.</div>
+            </div>
+          </div>
+          <footer class="source">Fonte: playbooks reais do projeto</footer>
+          <aside class="notes">
+            Tempo: 1 minuto e 10 segundos. Mostrar que o código resolve um
+            problema real encontrado no deploy: a VPS já possuía Docker. A
+            automação passou a observar esse estado antes de instalar pacotes.
+          </aside>
+        </section>
+
+        <section>
+          <header class="slide-head">
+            <p class="kicker">11 · CI/CD</p>
+            <h2>Validar antes de publicar</h2>
+          </header>
+          <div class="pipeline">
+            <div class="pipeline-start"><span>push</span><small>ou pull request</small></div>
+            <i>→</i>
+            <div class="parallel-jobs">
+              <article><span>QUALITY</span><b>Nix + Ansible</b><small>flake · syntax · lint</small></article>
+              <article><span>CONTAINER</span><b>Smoke test</b><small>build · health · HTTP</small></article>
+            </div>
+            <i>→</i>
+            <div class="deploy-gate"><span>MAIN</span><b>Deploy</b><small>provision · publish · verify</small></div>
+          </div>
+          <div class="pipeline-rules">
+            <article><b>Pull request</b><span>Executa validações sem publicar.</span></article>
+            <article><b>Branch principal</b><span>Faz deploy somente após os dois checks.</span></article>
+            <article><b>Secret protegido</b><span>A chave SSH existe apenas no runner temporário.</span></article>
+          </div>
+          <p class="takeaway">Falhar cedo na CI é mais barato do que descobrir o erro na VPS.</p>
+          <footer class="source">Fonte: workflow real em .github/workflows/ci.yaml · GitHub Actions</footer>
+          <aside class="notes">
+            Tempo: 50 segundos. Quality e container podem validar aspectos
+            diferentes. O deploy depende dos dois e só ocorre na main. Pull
+            requests dão feedback sem modificar a VPS.
+          </aside>
+        </section>
+
+        <section class="demo-slide" data-background-color="#071821">
+          <div class="demo-ring" aria-hidden="true"><span></span></div>
+          <h2>Demonstração prática</h2>
+          <aside class="notes">
+            Tempo reservado: aproximadamente 1 minuto e 50 segundos. Mostrar o
+            repositório, uma execução do GitHub Actions e a aplicação publicada.
+          </aside>
+        </section>
+
+        <section>
+          <header class="slide-head">
+            <p class="kicker">12 · Conclusão</p>
+            <h2>Automação torna a mudança repetível</h2>
+          </header>
+          <div class="results-layout">
+            <div class="result-column benefits">
+              <h3>O que ganhamos</h3>
+              <ul>
+                <li><span>✓</span>Configuração versionada e auditável</li>
+                <li><span>✓</span>Deploy padronizado e reproduzível</li>
+                <li><span>✓</span>Validação automática antes e depois</li>
+                <li><span>✓</span>Menos procedimentos manuais</li>
+              </ul>
+            </div>
+            <div class="result-column limits">
+              <h3>Limites atuais</h3>
+              <ul>
+                <li><span>—</span>Uma única VPS, sem alta disponibilidade</li>
+                <li><span>—</span>Criação inicial da VPS fora do escopo</li>
+                <li><span>—</span>Protótipo com aplicação estática</li>
+                <li><span>—</span>Adaptações necessárias para outras cargas</li>
+              </ul>
+            </div>
+          </div>
+          <blockquote>
+            “Infraestrutura deixa de ser uma sequência de comandos e passa a ser
+            uma definição revisável, executável e verificável.”
+          </blockquote>
+          <div class="final-line"><span>Reproduzir</span><i>·</i><span>Versionar</span><i>·</i><span>Verificar</span></div>
+          <aside class="notes">
+            Tempo: 1 minuto. Concluir conectando teoria e protótipo. Reconhecer
+            limites demonstra análise crítica; a solução não promete alta
+            disponibilidade, mas prova padronização e rastreabilidade.
+          </aside>
         </section>
       </div>
     </div>
@@ -97,11 +466,16 @@ make deploy
     <script src="vendor/reveal/plugin/notes/notes.js"></script>
     <script>
       Reveal.initialize({
+        width: 1600,
+        height: 900,
+        margin: 0.035,
         controls: true,
         progress: true,
         hash: true,
+        history: true,
+        center: false,
         slideNumber: "c/t",
-        transition: "slide",
+        transition: "fade",
         backgroundTransition: "fade",
         plugins: [RevealHighlight, RevealNotes],
       });
