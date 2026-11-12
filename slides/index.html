@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="vendor/reveal/dist/reset.css" />
     <link rel="stylesheet" href="vendor/reveal/dist/reveal.css" />
     <link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.css" />
-    <link rel="stylesheet" href="styles.css?v=20261112-3" />
+    <link rel="stylesheet" href="styles.css?v=20261112-4" />
   </head>
   <body>
     <div class="reveal">
@@ -434,12 +434,12 @@
               </ul>
             </div>
             <div class="result-column limits">
-              <h3>Limites atuais</h3>
+              <h3>Desafios do IaC</h3>
               <ul>
-                <li><span>—</span>Uma única VPS, sem alta disponibilidade</li>
-                <li><span>—</span>Criação inicial da VPS fora do escopo</li>
-                <li><span>—</span>Protótipo com aplicação estática</li>
-                <li><span>—</span>Adaptações necessárias para outras cargas</li>
+                <li><span>!</span>Custo inicial de código, testes e capacitação</li>
+                <li><span>!</span>Erros automatizados podem se propagar em escala</li>
+                <li><span>!</span>Mudanças manuais geram configuration drift</li>
+                <li><span>!</span>Secrets e arquivos de estado exigem governança</li>
               </ul>
             </div>
           </div>
@@ -450,8 +450,9 @@
           <div class="final-line"><span>Reproduzir</span><i>·</i><span>Versionar</span><i>·</i><span>Verificar</span></div>
           <aside class="notes">
             Tempo: 1 minuto. Concluir conectando teoria e protótipo. Reconhecer
-            limites demonstra análise crítica; a solução não promete alta
-            disponibilidade, mas prova padronização e rastreabilidade.
+            que IaC também exige investimento, revisão e governança. Automação
+            reduz erros repetitivos, mas pode amplificar rapidamente uma
+            definição incorreta.
           </aside>
         </section>
       </div>
