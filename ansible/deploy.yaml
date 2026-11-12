@@ -37,7 +37,6 @@
         mode: "0644"
       loop:
         - Dockerfile
-        - docker-compose.yaml
         - package.json
         - package-lock.json
 
@@ -48,15 +47,33 @@
         owner: "{{ ansible_user }}"
         mode: "0600"
 
-    - name: Build and start presentation service
-      community.docker.docker_compose_v2:
-        project_src: "{{ deploy_path }}"
+    - name: Build presentation image
+      community.docker.docker_image:
+        name: "{{ app_name }}:local"
+        source: build
         state: present
-        build: always
-        pull: never
-        remove_orphans: true
-        wait: true
-        wait_timeout: 90
+        force_source: true
+        build:
+          path: "{{ deploy_path }}"
+          pull: false
+
+    - name: Start presentation container
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        image: "{{ app_name }}:local"
+        state: started
+        restart_policy: "{{ restart_policy }}"
+        env:
+          CONTAINER_PORT: "{{ container_port | string }}"
+        published_ports:
+          - "{{ app_bind_address }}:{{ app_port }}:{{ container_port }}"
+        read_only: true
+        tmpfs:
+          - /tmp:size=16m,mode=1777
+        cap_drop:
+          - ALL
+        security_opts:
+          - no-new-privileges:true
 
     - name: Add managed Caddy site import
       ansible.builtin.blockinfile:

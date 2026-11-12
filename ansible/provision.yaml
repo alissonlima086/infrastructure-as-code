@@ -9,9 +9,12 @@
       ansible.builtin.assert:
         that:
           - ansible_facts.os_family == "Debian"
-          - ansible_facts.distribution in ["Ubuntu"]
-          - ansible_facts.distribution_major_version | int >= 24
-        fail_msg: "This playbook currently supports Ubuntu 24.04 or newer."
+          - >-
+            (ansible_facts.distribution == "Debian" and
+             ansible_facts.distribution_major_version | int >= 12) or
+            (ansible_facts.distribution == "Ubuntu" and
+             ansible_facts.distribution_major_version | int >= 24)
+        fail_msg: "This playbook supports Debian 12+ and Ubuntu 24.04+."
 
     - name: Validate deployment settings
       ansible.builtin.assert:
@@ -27,7 +30,7 @@
   tasks:
     - name: Install runtime packages
       ansible.builtin.apt:
-        name: "{{ ['docker.io', 'docker-compose-v2', 'python3'] + (['caddy'] if caddy_enabled else []) }}"
+        name: "{{ ['docker.io', 'python3', 'python3-requests'] + (['caddy'] if caddy_enabled else []) }}"
         state: present
         update_cache: true
         cache_valid_time: 3600
