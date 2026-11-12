@@ -1,5 +1,9 @@
 {{ app_domain }} {
     encode zstd gzip
+
+    @mutable_assets path / /index.html /styles.css
+    header @mutable_assets Cache-Control "no-store"
+
     reverse_proxy {{ app_bind_address }}:{{ app_port }}
 
     header {
@@ -8,4 +12,3 @@
         -Server
     }
 }
-
