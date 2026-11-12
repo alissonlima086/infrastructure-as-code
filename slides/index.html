@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="vendor/reveal/dist/reset.css" />
     <link rel="stylesheet" href="vendor/reveal/dist/reveal.css" />
     <link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.css" />
-    <link rel="stylesheet" href="styles.css?v=20261112-1" />
+    <link rel="stylesheet" href="styles.css?v=20261112-3" />
   </head>
   <body>
     <div class="reveal">
@@ -70,7 +70,7 @@
               </article>
             </div>
           </div>
-          <p class="takeaway">O problema não é apenas executar comandos — é garantir o mesmo resultado, sempre.</p>
+          <p class="takeaway">O problema não é apenas executar comandos, é garantir o mesmo resultado, sempre.</p>
           <footer class="source">Fonte: documentação introdutória do Ansible</footer>
           <aside class="notes">
             Tempo: 1 minuto. Começar pelo cenário oficial. Destacar que um
@@ -142,13 +142,9 @@
               <div><b>Módulos idempotentes</b><span>Evitam mudanças quando o estado já está correto.</span></div>
             </div>
           </div>
-          <pre class="compact-code"><code class="language-yaml" data-trim data-noescape>
-- name: Garantir que o Caddy esteja ativo
-  ansible.builtin.service:
-    name: caddy
-    state: started
-    enabled: true
-          </code></pre>
+          <div class="ansible-sequence" aria-label="Fluxo básico do Ansible">
+            <span>Inventário</span><i>→</i><span>Playbook YAML</span><i>→</i><span>SSH</span><i>→</i><strong>Estado desejado</strong>
+          </div>
           <footer class="source">Fontes: docs.ansible.com — Playbooks e Inventários</footer>
           <aside class="notes">
             Tempo: 1 minuto. Explicar controle, SSH, inventário e playbook. O
@@ -358,7 +354,7 @@
             <article><span>03</span><h3>Verify</h3><p>Confirma saúde do container, endpoint local e HTTPS público.</p></article>
           </div>
           <div class="playbook-bottom">
-            <pre><code class="language-yaml" data-trim data-noescape data-line-numbers="1-5|7-11">
+            <pre><code class="language-yaml" data-trim data-noescape>
 - name: Detectar Docker existente
   ansible.builtin.command:
     argv: [docker, --version]
@@ -372,15 +368,15 @@
             </code></pre>
             <div class="code-explain">
               <span class="site-badge">site.yaml</span>
-              <p>Orquestra os três playbooks na ordem correta.</p>
-              <div class="conflict-callout"><b>Decisão baseada no estado</b>O Docker do Coolify é preservado, evitando conflito entre <code>containerd.io</code> e os pacotes do Debian.</div>
+              <h3>Um ponto de entrada</h3>
+              <p>Orquestra provisionamento, implantação e verificação na ordem correta.</p>
             </div>
           </div>
           <footer class="source">Fonte: playbooks reais do projeto</footer>
           <aside class="notes">
-            Tempo: 1 minuto e 10 segundos. Mostrar que o código resolve um
-            problema real encontrado no deploy: a VPS já possuía Docker. A
-            automação passou a observar esse estado antes de instalar pacotes.
+            Tempo: 1 minuto e 10 segundos. Explicar a responsabilidade de cada
+            playbook e como o site.yaml cria um único ponto de entrada para o
+            processo completo.
           </aside>
         </section>
 

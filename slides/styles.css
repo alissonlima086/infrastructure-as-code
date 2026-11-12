@@ -1263,6 +1263,11 @@
   justify-content: center;
 }
 
+.code-explain h3 {
+  font-size: 28px;
+  margin-top: 20px;
+}
+
 .site-badge {
   border: 1px solid rgba(98, 199, 242, 0.4);
   border-radius: 999px;
@@ -1277,26 +1282,6 @@
   color: var(--muted);
   font-size: 0.34em;
   margin-top: 9px;
-}
-
-.conflict-callout {
-  background: rgba(246, 189, 96, 0.08);
-  border-left: 3px solid var(--amber);
-  color: var(--muted);
-  font-size: 0.31em;
-  line-height: 1.5;
-  margin-top: 20px;
-  padding: 15px 17px;
-}
-
-.conflict-callout b {
-  color: var(--amber);
-  display: block;
-  font-size: 1.15em;
-}
-
-.conflict-callout code {
-  color: #e8d7ba;
 }
 
 /* CI/CD */
@@ -1566,4 +1551,326 @@
   .reveal {
     font-size: 25px;
   }
+}
+
+/* Escala tipográfica comum — os slides são desenhados em 1600 × 900 e o
+   Reveal redimensiona o quadro inteiro para a tela disponível. */
+.reveal h2 {
+  font-size: 56px;
+}
+
+.reveal h3 {
+  font-size: 28px;
+}
+
+.kicker {
+  font-size: 15px;
+}
+
+.source {
+  font-size: 13px;
+}
+
+.takeaway {
+  font-size: 20px;
+}
+
+.cover h1 {
+  font-size: 78px;
+}
+
+.cover .kicker,
+.cover-meta {
+  font-size: 15px;
+}
+
+.cover-subtitle {
+  font-size: 25px;
+}
+
+.card-label,
+.state-flow article small,
+.flow-engine small,
+.controller small,
+.ssh-line span,
+.tool-card-head small,
+.layer small,
+.nix-compare small,
+.prototype-side small,
+.lane-label,
+.lane-steps article span,
+.lane-steps article small,
+.site-badge,
+.parallel-jobs span,
+.deploy-gate span {
+  font-size: 14px;
+}
+
+.incident-card > strong {
+  font-size: 29px;
+}
+
+.incident-path span,
+.problem-list span,
+.concept-grid p,
+.server-stack div,
+.tool-points span,
+.best-for,
+.layer p,
+.nix-compare p,
+.nix-compare li,
+.prototype-main > p,
+.prototype-side strong,
+.playbook-flow p,
+.code-explain > p,
+.pipeline-rules span {
+  font-size: 17px;
+}
+
+.problem-list b,
+.formula code,
+.resource-icons span,
+.laptop-icon,
+.stack-row span,
+.request-line i {
+  font-size: 15px;
+}
+
+.problem-list strong,
+.concept-grid strong,
+.flow-engine b,
+.tool-points b,
+.shared-goal,
+.combo-flow span,
+.nix-project-flow,
+.tradeoff-strip span,
+.request-line span,
+.security-note p,
+.pipeline-rules b,
+.result-column li,
+.final-line {
+  font-size: 18px;
+}
+
+.state-flow article strong,
+.controller strong {
+  font-size: 23px;
+}
+
+.flow-engine span {
+  font-size: 30px;
+}
+
+.tool-card-head h3,
+.layer h3,
+.nix-compare h3 {
+  font-size: 30px;
+}
+
+.tool-card ul {
+  font-size: 19px;
+}
+
+.layer-number {
+  font-size: 22px;
+}
+
+.comparison-table .table-row {
+  font-size: 16px;
+}
+
+.comparison-table .table-head {
+  font-size: 14px;
+}
+
+.tradeoff-strip b {
+  font-size: 19px;
+}
+
+.browser-bar span,
+.browser-content small {
+  font-size: 14px;
+}
+
+.browser-content strong {
+  font-size: 27px;
+}
+
+.lane-steps article b,
+.playbook-flow h3,
+.parallel-jobs b,
+.deploy-gate b {
+  font-size: 21px;
+}
+
+.security-note > span {
+  font-size: 25px;
+}
+
+.security-note strong {
+  font-size: 19px;
+}
+
+.reveal .playbook-bottom pre {
+  font-size: 16px;
+}
+
+.pipeline-start span {
+  font-size: 25px;
+}
+
+.pipeline small {
+  font-size: 14px;
+}
+
+.result-column h3 {
+  font-size: 26px;
+}
+
+.reveal blockquote {
+  font-size: 22px;
+}
+
+.ansible-sequence {
+  align-items: center;
+  background: rgba(114, 241, 200, 0.07);
+  border: 1px solid rgba(114, 241, 200, 0.24);
+  border-radius: 12px;
+  display: flex;
+  font-size: 18px;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 26px;
+  padding: 18px 24px;
+}
+
+.ansible-sequence span {
+  color: #c8d9d5;
+}
+
+.ansible-sequence i {
+  color: var(--cyan);
+  font-style: normal;
+}
+
+.ansible-sequence strong {
+  color: var(--mint);
+}
+
+/* Legibilidade para projeção: nenhum conteúdo explicativo importante depende
+   de corpo pequeno. Textos auxiliares continuam menores, mas não carregam a
+   mensagem principal do slide. */
+.problem-list span {
+  font-size: 23px;
+  line-height: 1.35;
+}
+
+.problem-list strong {
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+.problem-list article {
+  min-height: 96px;
+  padding: 17px 24px;
+}
+
+.problem-list b {
+  font-size: 18px;
+}
+
+.state-flow article small,
+.flow-engine small {
+  font-size: 17px;
+}
+
+.state-flow article strong {
+  font-size: 27px;
+}
+
+.flow-engine b {
+  font-size: 23px;
+}
+
+.flow-engine span {
+  font-size: 36px;
+}
+
+.concept-grid strong {
+  font-size: 23px;
+  min-height: 54px;
+}
+
+.concept-grid p {
+  font-size: 21px;
+  line-height: 1.4;
+}
+
+.concept-grid article {
+  padding: 18px 16px 0;
+}
+
+.formula code {
+  font-size: 19px;
+  padding: 10px 15px;
+}
+
+.formula span {
+  font-size: 25px;
+}
+
+.controller small {
+  font-size: 17px;
+}
+
+.controller strong {
+  font-size: 27px;
+}
+
+.ssh-line span {
+  font-size: 16px;
+}
+
+.server-stack div {
+  font-size: 20px;
+  padding: 15px;
+}
+
+.tool-points div {
+  min-height: 128px;
+  padding: 22px;
+}
+
+.tool-points b {
+  font-size: 24px;
+}
+
+.tool-points span {
+  font-size: 21px;
+  line-height: 1.4;
+}
+
+.ansible-sequence {
+  font-size: 22px;
+  margin-top: 24px;
+  padding: 20px 24px;
+}
+
+.reveal pre,
+.reveal .playbook-bottom pre {
+  font-size: 19px;
+}
+
+.reveal pre code,
+.reveal .playbook-bottom pre code {
+  font-size: 19px;
+  line-height: 1.35;
+}
+
+.reveal :not(pre) > code {
+  font-size: 0.95em;
+}
+
+.code-explain > p {
+  font-size: 20px;
 }
