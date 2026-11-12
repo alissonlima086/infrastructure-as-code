@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reveal.js — deck de teste</title>
+    <link rel="stylesheet" href="vendor/reveal/dist/reset.css" />
+    <link rel="stylesheet" href="vendor/reveal/dist/reveal.css" />
+    <link rel="stylesheet" href="vendor/reveal/dist/theme/black.css" />
+    <link rel="stylesheet" href="vendor/reveal/plugin/highlight/monokai.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <!-- Conteúdo de demonstração: substitua estas seções pelos seus slides. -->
+        <section data-background-gradient="linear-gradient(135deg, #07111f, #12304a)">
+          <p class="eyebrow">Deck de demonstração</p>
+          <h1>Reveal.js pronto</h1>
+          <p class="lead">Use as setas do teclado ou deslize para navegar.</p>
+          <p class="hint">Pressione <kbd>F</kbd> para tela cheia e <kbd>O</kbd> para visão geral.</p>
+          <aside class="notes">
+            Esta é uma nota do apresentador. Pressione S para abrir a visão do apresentador.
+          </aside>
+        </section>
+
+        <section>
+          <p class="eyebrow">Teste 01</p>
+          <h2>Recursos habilitados</h2>
+          <div class="feature-grid">
+            <article>
+              <strong>Navegação</strong>
+              <span>Controles, teclado e gestos</span>
+            </article>
+            <article>
+              <strong>URL persistente</strong>
+              <span>Hash atualizado por slide</span>
+            </article>
+            <article>
+              <strong>Código</strong>
+              <span>Destaque de sintaxe local</span>
+            </article>
+            <article>
+              <strong>Offline</strong>
+              <span>Sem dependência de CDN</span>
+            </article>
+          </div>
+        </section>
+
+        <section>
+          <p class="eyebrow">Teste 02</p>
+          <h2>Fragmentos progressivos</h2>
+          <p class="fragment fade-up">Este conteúdo aparece primeiro.</p>
+          <p class="fragment fade-up">Este aparece em seguida.</p>
+          <p class="fragment highlight-current-blue">E este recebe destaque.</p>
+          <p class="hint fragment">Avance para revelar cada item.</p>
+        </section>
+
+        <section>
+          <section data-background-color="#102a43">
+            <p class="eyebrow">Teste 03</p>
+            <h2>Slides verticais</h2>
+            <p>Agora use a seta para baixo.</p>
+            <div class="direction-arrow" aria-hidden="true">↓</div>
+          </section>
+          <section data-background-color="#173f5f">
+            <h2>Segundo nível</h2>
+            <p>Este slide está abaixo do anterior.</p>
+            <p class="hint">Use a seta para cima para voltar.</p>
+          </section>
+        </section>
+
+        <section>
+          <p class="eyebrow">Teste 04</p>
+          <h2>Trecho de código</h2>
+          <pre><code class="language-bash" data-trim data-line-numbers="1-2|4-5">
+make env
+make up
+
+# Depois de editar os slides:
+make deploy
+          </code></pre>
+          <p class="hint">As linhas são destacadas em etapas.</p>
+        </section>
+
+        <section data-background-gradient="linear-gradient(135deg, #12304a, #0d7377)">
+          <p class="eyebrow">Tudo funcionando</p>
+          <h2>Pronto para editar</h2>
+          <p>Substitua estas seções pelo conteúdo da sua apresentação.</p>
+          <p class="file-path"><code>slides/index.html</code></p>
+        </section>
+      </div>
+    </div>
+
+    <script src="vendor/reveal/dist/reveal.js"></script>
+    <script src="vendor/reveal/plugin/highlight/highlight.js"></script>
+    <script src="vendor/reveal/plugin/notes/notes.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        hash: true,
+        slideNumber: "c/t",
+        transition: "slide",
+        backgroundTransition: "fade",
+        plugins: [RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>

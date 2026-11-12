@@ -1,0 +1,16 @@
+---
+ansible_host: "{{ lookup('ansible.builtin.env', 'VPS_HOST') }}"
+ansible_port: "{{ lookup('ansible.builtin.env', 'VPS_PORT') | default('22', true) | int }}"
+ansible_user: "{{ lookup('ansible.builtin.env', 'VPS_USER') }}"
+ansible_ssh_private_key_file: "{{ lookup('ansible.builtin.env', 'SSH_KEY_PATH') }}"
+
+app_name: "{{ lookup('ansible.builtin.env', 'APP_NAME') | default('iac-presentation', true) }}"
+app_domain: "{{ lookup('ansible.builtin.env', 'APP_DOMAIN') }}"
+app_port: "{{ lookup('ansible.builtin.env', 'APP_PORT') | default('8080', true) | int }}"
+app_bind_address: "{{ lookup('ansible.builtin.env', 'APP_BIND_ADDRESS') | default('127.0.0.1', true) }}"
+container_port: "{{ lookup('ansible.builtin.env', 'CONTAINER_PORT') | default('8000', true) | int }}"
+container_name: "{{ lookup('ansible.builtin.env', 'CONTAINER_NAME') | default('iac-slides', true) }}"
+restart_policy: "{{ lookup('ansible.builtin.env', 'RESTART_POLICY') | default('unless-stopped', true) }}"
+deploy_path: "{{ lookup('ansible.builtin.env', 'DEPLOY_PATH') | default('/opt/iac-presentation', true) }}"
+caddy_enabled: "{{ lookup('ansible.builtin.env', 'CADDY_ENABLED') | default('true', true) | bool }}"
+caddy_config_dir: "{{ lookup('ansible.builtin.env', 'CADDY_CONFIG_DIR') | default('/etc/caddy/sites', true) }}"

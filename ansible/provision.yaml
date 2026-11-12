@@ -1,0 +1,62 @@
+---
+- name: Provision presentation host
+  hosts: presentation
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Validate supported operating system
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.os_family == "Debian"
+          - ansible_facts.distribution in ["Ubuntu"]
+          - ansible_facts.distribution_major_version | int >= 24
+        fail_msg: "This playbook currently supports Ubuntu 24.04 or newer."
+
+    - name: Validate deployment settings
+      ansible.builtin.assert:
+        that:
+          - ansible_host | length > 0
+          - ansible_user | length > 0
+          - deploy_path.startswith('/')
+          - app_port | int > 0
+          - container_port | int > 0
+          - app_bind_address == "127.0.0.1"
+        fail_msg: "Review the VPS and application values in .env. Remote binding must use 127.0.0.1."
+
+  tasks:
+    - name: Install runtime packages
+      ansible.builtin.apt:
+        name: "{{ ['docker.io', 'docker-compose-v2', 'python3'] + (['caddy'] if caddy_enabled else []) }}"
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Enable and start Docker
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Enable and start Caddy
+      ansible.builtin.service:
+        name: caddy
+        state: started
+        enabled: true
+      when: caddy_enabled
+
+    - name: Create application directory
+      ansible.builtin.file:
+        path: "{{ deploy_path }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        mode: "0755"
+
+    - name: Create Caddy sites directory
+      ansible.builtin.file:
+        path: "{{ caddy_config_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      when: caddy_enabled

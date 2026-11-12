@@ -1,0 +1,9 @@
+---
+- name: Run provisioning
+  ansible.builtin.import_playbook: provision.yaml
+
+- name: Run deployment
+  ansible.builtin.import_playbook: deploy.yaml
+
+- name: Run verification
+  ansible.builtin.import_playbook: verify.yaml

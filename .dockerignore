@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+.direnv
+ansible
+flake.nix
+flake.lock
+Makefile
+README.md
+sdd.md
+result
+

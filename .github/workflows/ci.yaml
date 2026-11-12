@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Nix and Ansible
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      ANSIBLE_CONFIG: ansible/ansible.cfg
+      ANSIBLE_COLLECTIONS_PATH: ${{ github.workspace }}/.ansible/collections
+      VPS_HOST: 192.0.2.10
+      VPS_PORT: "22"
+      VPS_USER: deploy
+      SSH_KEY_PATH: /tmp/ci-placeholder-key
+      APP_DOMAIN: slides.example.test
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Evaluate flake
+        run: nix flake check
+
+      - name: Install pinned Ansible collections
+        run: >-
+          nix develop --command
+          ansible-galaxy collection install
+          -r ansible/requirements.yaml
+          -p "$ANSIBLE_COLLECTIONS_PATH"
+
+      - name: Check Ansible syntax
+        run: >-
+          nix develop --command
+          ansible-playbook
+          -i ansible/inventory.ini
+          ansible/site.yaml
+          --syntax-check
+
+      - name: Lint Ansible
+        run: nix develop --command ansible-lint ansible
+
+      - name: Lint workflow
+        run: nix develop --command actionlint .github/workflows/ci.yaml
+
+  container:
+    name: Container smoke test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Create local environment
+        run: make env
+
+      - name: Validate Compose configuration
+        run: docker compose --env-file .env -f docker-compose.yaml config --quiet
+
+      - name: Audit JavaScript dependencies
+        run: npm audit --omit=dev
+
+      - name: Build and start presentation
+        run: make up
+
+      - name: Wait for healthy container
+        run: |
+          for attempt in {1..12}; do
+            status="$(docker inspect --format='{{.State.Health.Status}}' iac-slides)"
+            if [ "$status" = "healthy" ]; then
+              exit 0
+            fi
+            echo "Attempt $attempt: container health is $status"
+            sleep 5
+          done
+          docker compose --env-file .env -f docker-compose.yaml logs
+          exit 1
+
+      - name: Check presentation and Reveal.js assets
+        run: |
+          curl --fail --silent --show-error http://127.0.0.1:8080/ >/dev/null
+          curl --fail --silent --show-error http://127.0.0.1:8080/vendor/reveal/dist/reveal.js >/dev/null
+          curl --fail --silent --show-error http://127.0.0.1:8080/vendor/reveal/dist/reveal.css >/dev/null
+
+      - name: Stop test environment
+        if: always()
+        run: docker compose --env-file .env -f docker-compose.yaml down --volumes

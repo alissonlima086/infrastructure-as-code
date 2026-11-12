@@ -1,0 +1,43 @@
+---
+- name: Verify presentation deployment
+  hosts: presentation
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Read presentation container state
+      community.docker.docker_container_info:
+        name: "{{ container_name }}"
+      register: presentation_container
+
+    - name: Assert container is running and healthy
+      ansible.builtin.assert:
+        that:
+          - presentation_container.exists
+          - presentation_container.container.State.Status == "running"
+          - presentation_container.container.State.Health.Status == "healthy"
+        fail_msg: "The presentation container is not running and healthy."
+
+    - name: Check local HTTP endpoint from the VPS
+      ansible.builtin.uri:
+        url: "http://127.0.0.1:{{ app_port }}/"
+        status_code: 200
+        return_content: false
+      register: local_http
+      retries: 6
+      delay: 5
+      until: local_http.status == 200
+
+    - name: Check public HTTPS endpoint from the controller
+      ansible.builtin.uri:
+        url: "https://{{ app_domain }}/"
+        status_code: 200
+        return_content: false
+        validate_certs: true
+      delegate_to: localhost
+      become: false
+      register: public_https
+      retries: 12
+      delay: 5
+      until: public_https.status == 200
+      when: caddy_enabled

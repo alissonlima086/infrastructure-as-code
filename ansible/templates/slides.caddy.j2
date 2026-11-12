@@ -1,0 +1,11 @@
+{{ app_domain }} {
+    encode zstd gzip
+    reverse_proxy {{ app_bind_address }}:{{ app_port }}
+
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+}
+

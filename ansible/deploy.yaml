@@ -1,0 +1,97 @@
+---
+- name: Deploy Reveal.js presentation shell
+  hosts: presentation
+  become: true
+  gather_facts: false
+
+  pre_tasks:
+    - name: Validate deployment settings
+      ansible.builtin.assert:
+        that:
+          - app_domain | length > 0
+          - app_domain != "slides.example.com"
+          - app_bind_address == "127.0.0.1"
+          - deploy_path.startswith('/')
+        fail_msg: "Configure APP_DOMAIN and keep APP_BIND_ADDRESS=127.0.0.1 in .env."
+
+    - name: Ensure application directory exists
+      ansible.builtin.file:
+        path: "{{ deploy_path }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        mode: "0755"
+
+  tasks:
+    - name: Copy presentation source
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../slides/"
+        dest: "{{ deploy_path }}/slides/"
+        owner: "{{ ansible_user }}"
+        mode: preserve
+
+    - name: Copy container project files
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../{{ item }}"
+        dest: "{{ deploy_path }}/{{ item }}"
+        owner: "{{ ansible_user }}"
+        mode: "0644"
+      loop:
+        - Dockerfile
+        - docker-compose.yaml
+        - package.json
+        - package-lock.json
+
+    - name: Render deployment environment
+      ansible.builtin.template:
+        src: deployment.env.j2
+        dest: "{{ deploy_path }}/.env"
+        owner: "{{ ansible_user }}"
+        mode: "0600"
+
+    - name: Build and start presentation service
+      community.docker.docker_compose_v2:
+        project_src: "{{ deploy_path }}"
+        state: present
+        build: always
+        pull: never
+        remove_orphans: true
+        wait: true
+        wait_timeout: 90
+
+    - name: Add managed Caddy site import
+      ansible.builtin.blockinfile:
+        path: /etc/caddy/Caddyfile
+        marker: "# {mark} ANSIBLE MANAGED PRESENTATION SITES"
+        block: "import {{ caddy_config_dir }}/*"
+        validate: "caddy validate --config %s --adapter caddyfile"
+      when: caddy_enabled
+      notify: Reload Caddy safely
+
+    - name: Render presentation Caddy site
+      ansible.builtin.template:
+        src: slides.caddy.j2
+        dest: "{{ caddy_config_dir }}/{{ app_name }}.caddy"
+        owner: root
+        group: root
+        mode: "0644"
+      when: caddy_enabled
+      notify: Reload Caddy safely
+
+  handlers:
+    - name: Validate Caddy configuration
+      ansible.builtin.command:
+        argv:
+          - caddy
+          - validate
+          - --config
+          - /etc/caddy/Caddyfile
+          - --adapter
+          - caddyfile
+      changed_when: false
+      listen: Reload Caddy safely
+
+    - name: Reload Caddy
+      ansible.builtin.service:
+        name: caddy
+        state: reloaded
+      listen: Reload Caddy safely
