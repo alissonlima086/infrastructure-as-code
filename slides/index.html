@@ -16,25 +16,30 @@
   <body>
     <div class="reveal">
       <div class="slides">
-        <section class="cover" data-background-color="#061019">
-          <div class="ambient ambient-a"></div>
-          <div class="ambient ambient-b"></div>
-          <div class="cover-mark" aria-hidden="true">
-            <span></span><span></span><span></span>
-          </div>
-          <p class="kicker">Grupo 04 · Seminário e Projeto A2</p>
-          <h1>Automação e<br /><em>Gerência de Configuração</em></h1>
-          <p class="cover-subtitle">
-            Da configuração manual a uma infraestrutura reproduzível,
-            versionada e verificável.
-          </p>
-          <div class="cover-meta">
-            <span>Infraestrutura como código</span>
-            <span>Ansible · Docker · Nix · GitHub Actions</span>
+        <section class="cover">
+          <div class="cover-content">
+            <div class="cover-intro">
+              <p class="kicker">Grupo 04 · Seminário e Projeto A2</p>
+              <h1>Automação e<br /><em>Gerência de Configuração</em></h1>
+              <p class="cover-subtitle">
+                Da configuração manual a uma infraestrutura reproduzível,
+                versionada e verificável.
+              </p>
+            </div>
+            <div class="cover-members">
+              <p>Integrantes</p>
+              <div>
+                <span>Ana Paula Gomes Miranda</span>
+                <span>Alisson de Oliveira Lima</span>
+                <span>Kauê Glória Milhomem</span>
+                <span>José Neto</span>
+                <span>Michael Sena</span>
+              </div>
+            </div>
           </div>
           <aside class="notes">
             Tempo: 20 segundos. Apresentar o Grupo 04 e o objetivo: conectar os
-            conceitos de automação a uma implantação real em uma VPS Debian.
+            conceitos de automação a uma implantação real em um servidor Debian.
           </aside>
         </section>
 
@@ -79,7 +84,7 @@
           </aside>
         </section>
 
-        <section>
+        <section class="fundamentals-slide">
           <header class="slide-head">
             <p class="kicker">02 · Fundamentos</p>
             <h2>Automação transforma intenção em estado</h2>
@@ -102,12 +107,23 @@
             </article>
           </div>
           <div class="concept-grid">
-            <article><strong>Automação</strong><p>Executa tarefas com intervenção humana mínima.</p></article>
-            <article><strong>Gerência de configuração</strong><p>Mantém sistemas aderentes a uma definição conhecida.</p></article>
-            <article><strong>Infraestrutura como código</strong><p>Representa infraestrutura em arquivos revisáveis e versionados.</p></article>
-            <article><strong>Idempotência</strong><p>Repetir a execução preserva o mesmo estado desejado.</p></article>
+            <article>
+              <span class="concept-number">01</span>
+              <div><strong>Automação</strong><p>Executa tarefas com intervenção humana mínima.</p></div>
+            </article>
+            <article>
+              <span class="concept-number">02</span>
+              <div><strong>Gerência de configuração</strong><p>Mantém sistemas aderentes a uma definição conhecida.</p></div>
+            </article>
+            <article>
+              <span class="concept-number">03</span>
+              <div><strong>Infraestrutura como código</strong><p>Representa infraestrutura em arquivos revisáveis e versionados.</p></div>
+            </article>
+            <article>
+              <span class="concept-number">04</span>
+              <div><strong>Idempotência</strong><p>Repetir a execução preserva o mesmo estado desejado.</p></div>
+            </article>
           </div>
-          <div class="formula"><code>estado atual</code><span>+</span><code>automação</code><span>→</span><code>estado desejado</code></div>
           <footer class="source">Fontes: HashiCorp — Infrastructure as Code · Ansible — Playbooks</footer>
           <aside class="notes">
             Tempo: 1 minuto e 10 segundos. Explicar que IaC permite revisão e
@@ -213,7 +229,7 @@
             </article>
           </div>
           <div class="combo-flow">
-            <span>Terraform provisiona a VPS</span><i>→</i><span>Ansible configura o sistema</span><i>→</i><span>Aplicação entra em produção</span>
+            <span>Terraform provisiona o servidor</span><i>→</i><span>Ansible configura o sistema</span><i>→</i><span>Aplicação entra em produção</span>
           </div>
           <p class="takeaway">Provisionar recursos e configurar sistemas são camadas diferentes — e complementares.</p>
           <footer class="source">Fontes: developer.hashicorp.com/terraform · developer.hashicorp.com/vagrant</footer>
@@ -226,7 +242,49 @@
 
         <section>
           <header class="slide-head">
-            <p class="kicker">06 · Reprodutibilidade</p>
+            <p class="kicker">06 · Containers</p>
+            <h2>Docker padroniza como a aplicação é executada</h2>
+          </header>
+          <div class="docker-layout">
+            <div class="docker-pipeline" aria-label="Fluxo de construção e execução de um container">
+              <article>
+                <span>01</span>
+                <small>Definição</small>
+                <strong>Dockerfile</strong>
+                <p>Declara aplicação, dependências e comando de inicialização.</p>
+              </article>
+              <i>→</i>
+              <article>
+                <span>02</span>
+                <small>Artefato</small>
+                <strong>Imagem</strong>
+                <p>Empacota uma versão reproduzível e pronta para distribuição.</p>
+              </article>
+              <i>→</i>
+              <article>
+                <span>03</span>
+                <small>Execução</small>
+                <strong>Container</strong>
+                <p>Executa a imagem de forma isolada e configurável no servidor.</p>
+              </article>
+            </div>
+            <div class="docker-responsibilities">
+              <article><b>Docker</b><span>Padroniza a aplicação e suas dependências.</span></article>
+              <article><b>Ansible</b><span>Padroniza o servidor, a rede e o ciclo de implantação.</span></article>
+            </div>
+          </div>
+          <p class="takeaway">Docker reduz diferenças dentro da aplicação; Ansible reduz diferenças entre servidores.</p>
+          <footer class="source">Fonte: docs.docker.com — Images, containers and Dockerfiles</footer>
+          <aside class="notes">
+            Tempo: 50 segundos. Explicar que uma imagem é o pacote imutável e
+            o container é sua execução. Docker torna a aplicação portátil, mas
+            não prepara sozinho o host; por isso ele complementa o Ansible.
+          </aside>
+        </section>
+
+        <section>
+          <header class="slide-head">
+            <p class="kicker">07 · Reprodutibilidade</p>
             <h2>Nix não é NixOS</h2>
           </header>
           <div class="nix-compare">
@@ -240,25 +298,25 @@
             <div class="not-equal">≠</div>
             <article>
               <div class="hex-mark muted">OS</div>
-              <small>Não usado na VPS</small>
+              <small>Não usado no servidor</small>
               <h3>NixOS</h3>
               <p>Distribuição Linux configurada declarativamente.</p>
               <ul><li>Sistema por código</li><li>Gerações</li><li>Rollback</li></ul>
             </article>
           </div>
           <div class="nix-project-flow"><code>flake.nix</code><span>→</span><b>Ansible · actionlint · Docker CLI · Node.js</b><span>→</span><strong>mesmo ambiente na CI</strong></div>
-          <p class="takeaway">A VPS permanece Debian; Nix padroniza as ferramentas de desenvolvimento e automação.</p>
+          <p class="takeaway">O servidor permanece Debian; Nix padroniza as ferramentas de desenvolvimento e automação.</p>
           <footer class="source">Fontes: nix.dev · nixos.org</footer>
           <aside class="notes">
             Tempo: 50 segundos. Corrigir a confusão comum: usamos Nix no runner
-            e no desenvolvimento. A VPS não é convertida para NixOS e continua
+            e no desenvolvimento. O servidor não é convertido para NixOS e continua
             sendo administrada pelo Ansible sobre Debian.
           </aside>
         </section>
 
         <section>
           <header class="slide-head compact-head">
-            <p class="kicker">07 · Visão comparativa</p>
+            <p class="kicker">08 · Visão comparativa</p>
             <h2>Uma cadeia de ferramentas, não uma disputa</h2>
           </header>
           <div class="comparison-table" role="table" aria-label="Comparação de ferramentas">
@@ -268,6 +326,7 @@
             <div class="table-row"><b>Chef</b><span>Receitas · Ruby</span><span>Políticas de configuração</span><span>Lógica customizada</span></div>
             <div class="table-row"><b>Terraform</b><span>Declarativo · estado</span><span>Recursos de infraestrutura</span><span>Cloud e provedores</span></div>
             <div class="table-row"><b>Vagrant</b><span>VMs locais</span><span>Ambientes de desenvolvimento</span><span>Teste reproduzível</span></div>
+            <div class="table-row"><b>Docker</b><span>Imagens · containers</span><span>Empacotamento e execução</span><span>Aplicações portáteis</span></div>
             <div class="table-row"><b>Nix / NixOS</b><span>Declarativo</span><span>Pacotes / sistema operacional</span><span>Reprodutibilidade</span></div>
           </div>
           <div class="tradeoff-strip">
@@ -285,7 +344,7 @@
 
         <section>
           <header class="slide-head">
-            <p class="kicker">08 · Caso prático</p>
+            <p class="kicker">09 · Caso prático</p>
             <h2>O protótipo publica a própria apresentação</h2>
           </header>
           <div class="prototype-layout">
@@ -299,7 +358,7 @@
             <div class="prototype-side">
               <article><small>Problema</small><strong>Configuração manual sujeita a erros</strong></article>
               <article><small>Solução</small><strong>Provisionar, publicar e verificar por código</strong></article>
-              <article><small>Ambiente</small><strong>VPS Debian existente</strong></article>
+              <article><small>Ambiente</small><strong>Servidor Debian existente</strong></article>
             </div>
           </div>
           <div class="stack-row"><span>Ansible</span><span>Docker</span><span>Nix</span><span>GitHub Actions</span><span>Caddy</span><span>Reveal.js</span></div>
@@ -313,7 +372,7 @@
 
         <section>
           <header class="slide-head compact-head">
-            <p class="kicker">09 · Arquitetura</p>
+            <p class="kicker">10 · Arquitetura</p>
             <h2>Do push ao HTTPS</h2>
           </header>
           <div class="architecture-lane">
@@ -343,7 +402,7 @@
 
         <section>
           <header class="slide-head compact-head">
-            <p class="kicker">10 · Implementação</p>
+            <p class="kicker">11 · Implementação</p>
             <h2>Playbooks com responsabilidades separadas</h2>
           </header>
           <div class="playbook-flow">
@@ -382,7 +441,7 @@
 
         <section>
           <header class="slide-head">
-            <p class="kicker">11 · CI/CD</p>
+            <p class="kicker">12 · CI/CD</p>
             <h2>Validar antes de publicar</h2>
           </header>
           <div class="pipeline">
@@ -400,27 +459,18 @@
             <article><b>Branch principal</b><span>Faz deploy somente após os dois checks.</span></article>
             <article><b>Secret protegido</b><span>A chave SSH existe apenas no runner temporário.</span></article>
           </div>
-          <p class="takeaway">Falhar cedo na CI é mais barato do que descobrir o erro na VPS.</p>
+          <p class="takeaway">Falhar cedo na CI é mais barato do que descobrir o erro no servidor.</p>
           <footer class="source">Fonte: workflow real em .github/workflows/ci.yaml · GitHub Actions</footer>
           <aside class="notes">
             Tempo: 50 segundos. Quality e container podem validar aspectos
             diferentes. O deploy depende dos dois e só ocorre na main. Pull
-            requests dão feedback sem modificar a VPS.
-          </aside>
-        </section>
-
-        <section class="demo-slide" data-background-color="#071821">
-          <div class="demo-ring" aria-hidden="true"><span></span></div>
-          <h2>Demonstração prática</h2>
-          <aside class="notes">
-            Tempo reservado: aproximadamente 1 minuto e 50 segundos. Mostrar o
-            repositório, uma execução do GitHub Actions e a aplicação publicada.
+            requests dão feedback sem modificar o servidor.
           </aside>
         </section>
 
         <section>
           <header class="slide-head">
-            <p class="kicker">12 · Conclusão</p>
+            <p class="kicker">13 · Conclusão</p>
             <h2>Automação torna a mudança repetível</h2>
           </header>
           <div class="results-layout">
@@ -472,6 +522,7 @@
         history: true,
         center: false,
         slideNumber: "c/t",
+        pdfSeparateFragments: false,
         transition: "fade",
         backgroundTransition: "fade",
         plugins: [RevealHighlight, RevealNotes],
